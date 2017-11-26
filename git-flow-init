@@ -256,7 +256,7 @@ cmd_default() {
 
 	# Release branches
 	if ! git config --get gitflow.prefix.release >/dev/null 2>&1 || flag force; then
-		default_suggestion=$(git config --get gitflow.prefix.release || echo release/)
+		default_suggestion=$(git config --get gitflow.prefix.release || echo Release-)
 		printf "Release branches? [$default_suggestion] "
 		if noflag defaults; then
 			read answer
