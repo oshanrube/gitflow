@@ -327,19 +327,19 @@ cmd_finish() {
 
 	# check if staging branch exists
 	if has "$ORIGIN/$STAGING_BRANCH" $(git_remote_branches); then
-	    # try to merge into staging
-    	# in case a previous attempt to finish this release branch has failed,
-    	# but the merge into staging was successful, we skip it now
-        if ! git_is_branch_merged_into "$BRANCH" "$STAGING_BRANCH"; then
-            git_do checkout "$STAGING_BRANCH" || \
-              die "Could not check out $STAGING_BRANCH."
+		# try to merge into staging
+		# in case a previous attempt to finish this release branch has failed,
+		# but the merge into staging was successful, we skip it now
+		if ! git_is_branch_merged_into "$BRANCH" "$STAGING_BRANCH"; then
+			git_do checkout "$STAGING_BRANCH" || \
+			  die "Could not check out $STAGING_BRANCH."
 
-            # TODO: Actually, accounting for 'git describe' pays, so we should
-            # ideally git merge --no-ff $tagname here, instead!
-            git_do merge --no-ff "$BRANCH" || \
-              die "There were merge conflicts."
-              # TODO: What do we do now?
-        fi
+			# TODO: Actually, accounting for 'git describe' pays, so we should
+			# ideally git merge --no-ff $tagname here, instead!
+			git_do merge --no-ff "$BRANCH" || \
+			  die "There were merge conflicts."
+			  # TODO: What do we do now?
+		fi
 	fi
 
 	# delete branch
