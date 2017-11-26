@@ -66,11 +66,11 @@ cmd_list() {
 	hotfix_branches=$(echo "$(git_local_branches)" | grep "^$PREFIX")
 	if [ -z "$hotfix_branches" ]; then
 		warn "No hotfix branches exist."
-                warn ""
-                warn "You can start a new hotfix branch:"
-                warn ""
-                warn "    git flow hotfix start <version> [<base>]"
-                warn ""
+				warn ""
+				warn "You can start a new hotfix branch:"
+				warn ""
+				warn "    git flow hotfix start <version> [<base>]"
+				warn ""
 		exit 0
 	fi
 	current_branch=$(git branch --no-color | grep '^\* ' | grep -v 'no branch' | sed 's/^* //g')
@@ -143,7 +143,7 @@ require_version_arg() {
 require_base_is_on_master() {
 	if ! git branch --no-color --contains "$BASE" 2>/dev/null \
 			| sed 's/[* ] //g' \
-	  		| grep -q "^$MASTER_BRANCH\$"; then
+			| grep -q "^$MASTER_BRANCH\$"; then
 		die "fatal: Given base '$BASE' is not a valid commit on '$MASTER_BRANCH'."
 	fi
 }
@@ -327,19 +327,19 @@ cmd_finish() {
 
 	# check if staging branch exists
 	if has "$ORIGIN/$STAGING_BRANCH" $(git_remote_branches); then
-	# try to merge into staging
-	# in case a previous attempt to finish this release branch has failed,
-	# but the merge into staging was successful, we skip it now
-	if ! git_is_branch_merged_into "$BRANCH" "$STAGING_BRANCH"; then
-		git_do checkout "$STAGING_BRANCH" || \
-		  die "Could not check out $STAGING_BRANCH."
+	    # try to merge into staging
+    	# in case a previous attempt to finish this release branch has failed,
+    	# but the merge into staging was successful, we skip it now
+        if ! git_is_branch_merged_into "$BRANCH" "$STAGING_BRANCH"; then
+            git_do checkout "$STAGING_BRANCH" || \
+              die "Could not check out $STAGING_BRANCH."
 
-		# TODO: Actually, accounting for 'git describe' pays, so we should
-		# ideally git merge --no-ff $tagname here, instead!
-		git_do merge --no-ff "$BRANCH" || \
-		  die "There were merge conflicts."
-		  # TODO: What do we do now?
-	fi
+            # TODO: Actually, accounting for 'git describe' pays, so we should
+            # ideally git merge --no-ff $tagname here, instead!
+            git_do merge --no-ff "$BRANCH" || \
+              die "There were merge conflicts."
+              # TODO: What do we do now?
+        fi
 	fi
 
 	# delete branch
