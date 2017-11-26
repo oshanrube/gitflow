@@ -272,6 +272,10 @@ cmd_finish() {
 		  die "Could not fetch $MASTER_BRANCH from $ORIGIN."
 		git_do fetch -q "$ORIGIN" "$DEVELOP_BRANCH" || \
 		  die "Could not fetch $DEVELOP_BRANCH from $ORIGIN."
+		if has "$ORIGIN/$STAGING_BRANCH" $(git_remote_branches); then
+			git_do fetch -q "$ORIGIN" "$STAGING_BRANCH" || \
+				die "Could not fetch $STAGING_BRANCH from $ORIGIN."
+		fi
 	fi
 	if has "$ORIGIN/$MASTER_BRANCH" $(git_remote_branches); then
 		require_branches_equal "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
