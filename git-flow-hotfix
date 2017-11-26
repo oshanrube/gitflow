@@ -256,6 +256,14 @@ cmd_finish() {
 		FLAGS_sign=$FLAGS_TRUE
 	fi
 
+	MAIN_VESION=${VERSION:0:1}
+	SUB_VESION=${VERSION:2:2}
+	if [ "$SUB_VESION" = 99 ]; then
+		STAGING_BRANCH="Release-$((MAIN_VESION+1)).00"
+	else
+		STAGING_BRANCH="Release-$MAIN_VESION.$((SUB_VESION+1))"
+	fi
+
 	# sanity checks
 	require_branch "$BRANCH"
 	require_clean_working_tree
