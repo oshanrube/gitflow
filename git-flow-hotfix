@@ -313,6 +313,20 @@ cmd_finish() {
 		  # TODO: What do we do now?
 	fi
 
+	# try to merge into staging
+	# in case a previous attempt to finish this release branch has failed,
+	# but the merge into staging was successful, we skip it now
+	if ! git_is_branch_merged_into "$BRANCH" "$STAGING_BRANCH"; then
+		git_do checkout "$STAGING_BRANCH" || \
+		  die "Could not check out $STAGING_BRANCH."
+
+		# TODO: Actually, accounting for 'git describe' pays, so we should
+		# ideally git merge --no-ff $tagname here, instead!
+		git_do merge --no-ff "$BRANCH" || \
+		  die "There were merge conflicts."
+		  # TODO: What do we do now?
+	fi
+
 	# delete branch
 	if noflag keep; then
 		git_do branch -d "$BRANCH"
@@ -323,6 +337,8 @@ cmd_finish() {
 			die "Could not push to $DEVELOP_BRANCH from $ORIGIN."
 		git_do push "$ORIGIN" "$MASTER_BRANCH" || \
 			die "Could not push to $MASTER_BRANCH from $ORIGIN."
+		git_do push "$ORIGIN" "$STAGING_BRANCH" || \
+			die "Could not push to $STAGING_BRANCH from $ORIGIN."
 		if noflag notag; then
 			git_do push --tags "$ORIGIN" || \
 				die "Could not push tags to $ORIGIN."
@@ -343,7 +359,7 @@ cmd_finish() {
 		echo "- Hotfix branch '$BRANCH' has been deleted"
 	fi
 	if flag push; then
-		echo "- '$DEVELOP_BRANCH', '$MASTER_BRANCH' and tags have been pushed to '$ORIGIN'"
+		echo "- '$DEVELOP_BRANCH', '$MASTER_BRANCH', '$STAGING_BRANCH' and tags have been pushed to '$ORIGIN'"
 	fi
 	echo
 }
