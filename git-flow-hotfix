@@ -299,12 +299,12 @@ cmd_finish() {
 		fi
 	fi
 
-	# try to merge into develop
+	# try to merge into staging
 	# in case a previous attempt to finish this release branch has failed,
-	# but the merge into develop was successful, we skip it now
-	if ! git_is_branch_merged_into "$BRANCH" "$DEVELOP_BRANCH"; then
-		git_do checkout "$DEVELOP_BRANCH" || \
-		  die "Could not check out $DEVELOP_BRANCH."
+	# but the merge into staging was successful, we skip it now
+	if ! git_is_branch_merged_into "$BRANCH" "$STAGING_BRANCH"; then
+		git_do checkout "$STAGING_BRANCH" || \
+		  die "Could not check out $STAGING_BRANCH."
 
 		# TODO: Actually, accounting for 'git describe' pays, so we should
 		# ideally git merge --no-ff $tagname here, instead!
@@ -313,12 +313,12 @@ cmd_finish() {
 		  # TODO: What do we do now?
 	fi
 
-	# try to merge into staging
+	# try to merge into develop
 	# in case a previous attempt to finish this release branch has failed,
-	# but the merge into staging was successful, we skip it now
-	if ! git_is_branch_merged_into "$BRANCH" "$STAGING_BRANCH"; then
-		git_do checkout "$STAGING_BRANCH" || \
-		  die "Could not check out $STAGING_BRANCH."
+	# but the merge into develop was successful, we skip it now
+	if ! git_is_branch_merged_into "$BRANCH" "$DEVELOP_BRANCH"; then
+		git_do checkout "$DEVELOP_BRANCH" || \
+		  die "Could not check out $DEVELOP_BRANCH."
 
 		# TODO: Actually, accounting for 'git describe' pays, so we should
 		# ideally git merge --no-ff $tagname here, instead!
